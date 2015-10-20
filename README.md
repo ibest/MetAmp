@@ -11,7 +11,7 @@ Such marker regions serve as unique identificators for species. There are nine m
 # How to install
 
 Make sure that you have a stable Internet connection. 
-You will also  need Python 2.7.6 (older versions may not support some features), R and GCC.
+You will also  need Python 2.7.6 (older versions may not support some features), R, GCC and USEARCH (http://www.drive5.com/usearch/)
 
 ## Linux
 ### Ubuntu
@@ -34,6 +34,9 @@ $make
 
 ## Windows
 Currently not supported. Sorry.
+
+After that, download USEARCH from: http://www.drive5.com/usearch/ and place it to the <MetAmp home>/bin, then make it executable by executing the following command:
+chmod +x usearchXXX
 
 # Provided data description
 

@@ -1,17 +1,18 @@
 #-----------------Alignment--------------------------------------------#
-usearch <- "usearch8.0.1403_i86osx32"
+usearch <- ""
 if (Sys.info()['sysname'] == "Darwin") { # OS-X
-  usearch <- "bin/./usearch8.0.1403_i86osx32"
+	if(system(paste("if [ -f ", getwd(), "/bin/usearch* ] ; then echo \"yes\" ; else echo \"no\" ; fi", sep=''), intern=TRUE) == "yes") {
+		usearch <- "bin/./usearch8*"
+	} else {
+		stop("USEARCH does not exist in <metamp home>/bin/>.")
+	}
 }
 if (Sys.info()['sysname'] == "Linux") { # Linux
-  usearch <- "bin/./usearch8.0.1403_i86linux32"
-}
-usearch7 <- "bin/./usearch7.0.1090_i86osx32"
-if (Sys.info()['sysname'] == "Darwin") { # OS-X
-  usearch7 <- "bin/./usearch7.0.1090_i86osx32"
-}
-if (Sys.info()['sysname'] == "Linux") { # Linux
-  usearch7 <- "bin/./usearch7.0.1090_i86linux32"
+  if(system("if [ -f ~/Projects/metamp/bin/usearch* ] ; then echo \"yes\" ; else echo \"no\" ; fi") == "yes") {
+		usearch <- "bin/./usearch8*"
+  } else {
+		stop("USEARCH does not exist in <metamp home>/bin/>.")
+  }
 }
 #--------------Miscellaneous------------------------------------------#
 # Path to installed BLASTParser library:

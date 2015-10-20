@@ -86,28 +86,29 @@ getRefOTUNum <- function(ref_points, otu) {
 cluster2 <- function(analysis_dir, lib, num) {
   # Denoising:
   denoisedlib <- paste(analysis_dir, "/", basename(lib), "_denoised", sep='')
-  system(paste(usearch7, "-fastq_filter", lib,  "-fastaout", denoisedlib, "-fastq_truncqual", qual, "-fastq_trunclen", min_len)) # "-fastq_truncqual 15 -fastq_trunclen 250"
+  system(paste(usearch, "-fastq_filter", lib,  "-fastaout", denoisedlib, "-fastq_truncqual", qual, "-fastq_trunclen", min_len)) # "-fastq_truncqual 15 -fastq_trunclen 250"
   # Dereplication:
   dreplib <- paste(denoisedlib, "_drep", sep='')
-  system(paste(usearch7, "-derep_fulllength", denoisedlib, "-output", dreplib, "-sizeout"))
+  #system(paste(usearch, "-derep_fulllength", denoisedlib, "-output", dreplib, "-sizeout"))
+  system(paste(usearch, "-derep_fulllength", denoisedlib, "-fastaout", dreplib, "-sizeout"))
   # Pre-clustering:
   preclustlib <- paste(dreplib, "_pre", sep='')
-  system(paste(usearch7, "-cluster_smallmem", dreplib, "-centroids", preclustlib, "-sizeout -id 0.99 -maxdiffs 1"))
+  system(paste(usearch, "-cluster_smallmem", dreplib, "-centroids", preclustlib, "-sizeout -id 0.99 -maxdiffs 1"))
   # Sorting (remove singletons):
   sortlib <- paste(preclustlib, "_sorted", sep='')
-  system(paste(usearch7, "-sortbysize", preclustlib, "-output", sortlib, "-minsize 2"))
+  system(paste(usearch, "-sortbysize", preclustlib, "-fastaout", sortlib, "-minsize 2"))
   # Clustering:
   clusterlib <- paste(sortlib, "_clustered", sep='')
-  system(paste(usearch7, "-cluster_otus", sortlib, "-otus", clusterlib, "-minsize 2"))
+  system(paste(usearch, "-cluster_otus", sortlib, "-otus", clusterlib, "-minsize 2"))
   # Filtering chimeric sequences:
   nochimericlib <- paste(clusterlib, "_nochimeric", sep='')
-  system(paste(usearch7, "-uchime_ref", clusterlib, "-db", chime_ref, "-strand plus -nonchimeras", nochimericlib))
+  system(paste(usearch, "-uchime_ref", clusterlib, "-db", chime_ref, "-strand plus -nonchimeras", nochimericlib))
   # Final OTUs:
   finalotus <- paste(nochimericlib, "_otus.fasta", sep='')
   system(paste("python python_scripts/fasta_number.py", nochimericlib, paste("OTU_",num,'_',sep=''), ">", finalotus))
   # Assign reads to OTUS:
   maptable <- paste(analysis_dir, "/", "map_", num, ".uc", sep='')
-  system(paste(usearch7, "-usearch_global", denoisedlib, "-db", finalotus, "-strand plus -id 0.97 -uc", maptable))
+  system(paste(usearch, "-usearch_global", denoisedlib, "-db", finalotus, "-strand plus -id 0.97 -uc", maptable))
   
   finalotus
 }
