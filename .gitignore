@@ -1,0 +1,11 @@
+data/even/
+data/staggered/
+test/
+test100/
+test1000/
+test500/
+*.pyc
+*.so
+*.o
+python_scripts/*.pyc
+bin/usearch*
