@@ -1,0 +1,16 @@
+
+V1-3 primers:
+forward_primer = "NGAGTTTGATCCTGGCTCAG" # -m=2 -p=-5 g=-8
+reverse_primer = "ATTACCGCGGCTGCTGG"
+
+V3-5 primers:
+forward_primer = "CCTACGGGAGGCAGCAG" # -m=2 -p=-5 g=-8
+reverse_primer = "CCGTCAATTCMTTTRAGN"
+
+V6-9 primers:
+forward_primer = "GAATTGACGGGGRCCC" # -m=2 -p=-5 -g=-1
+reverse_primer = "TACGGYTACCTTGTTAYGACTT"
+
+python extract.py 16S.fasta test --fp CCTACGGGAGGCAGCAG --rp CCGTCAATTCMTTTRAGN
+
+Candida albicans are not applicable (you have to extract 18S markers)
