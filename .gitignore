@@ -8,4 +8,4 @@ test500/
 *.so
 *.o
 python_scripts/*.pyc
-Extractor/*.pyc
+bin/usearch*
