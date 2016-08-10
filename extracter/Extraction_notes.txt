@@ -11,6 +11,6 @@ V6-9 primers:
 forward_primer = "GAATTGACGGGGRCCC" # -m=2 -p=-5 -g=-1
 reverse_primer = "TACGGYTACCTTGTTAYGACTT"
 
-python extract.py 16S.fasta test --fp CCTACGGGAGGCAGCAG --rp CCGTCAATTCMTTTRAGN
+python extract.py -i gold.fa -o test -fp CCTACGGGAGGCAGCAG -rp CCGTCAATTCMTTTRAGN
 
 Candida albicans are not applicable (you have to extract 18S markers)

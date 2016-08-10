@@ -3,14 +3,14 @@
 
 
 """
-This script extracts variable regions from 16S rRNA. Author: Ilya Y. Zhbannikov
+This script extracts variable regions from 16S rRNA. Author: Ilya Y. Zhbannikov, 2015
 
 Example run:
 
-python extract.py 16S.fasta test -fp CCTACGGGAGGCAGCAG -rp CCGTCAATTCMTTTRAGN -n 100
+python extract.py -i gold.fa -o test -fp CCTACGGGAGGCAGCAG -rp CCGTCAATTCMTTTRAGN
 
 Here: 
-16S.fasta - an input file that contains 16S sequences, must be provided in FASTA format;
+gold.fa - an input file that contains 16S sequences, must be provided in FASTA format;
 test - an output prefix for file that contains extracted variable regions, will be in FASTA format (i.e. test.fasta);
 CCTACGGGAGGCAGCAG - forward primer
 CCGTCAATTCMTTTRAGN - reverse primer
@@ -59,7 +59,7 @@ class Extract :
 	spos = 0
 	epos = 1600
 	num_reads = 3000
-	
+	verbose = False
 	
 	def __init__(self): # Initialization
 		self.match = 2 # Matсh award (-ma)
@@ -90,7 +90,6 @@ class Extract :
 		# For each line:
 		cnt = 0 # Counter
 		for record in SeqIO.parse(handle, "fasta") :
-			cnt += 1
 			
 			#Try to find a forward primer
 			v_region_found = False
@@ -159,11 +158,22 @@ class Extract :
 			if v_region_found == False : # Report the record for which marker region was not found:
 				SeqIO.write(record, not_found_handle, "fasta")
 			
-			print record.id, start_pos, stop_pos, v_region_found
+			if self.verbose :
+				print record.id, start_pos, stop_pos, v_region_found
+			
+			
 			output_table_handle.write(record.id + "\t" + str(start_pos) + '\t' + str(stop_pos) + '\t' + str(v_region_found) + '\n')
 			self.start_avg.append(start_pos)
 			self.stop_avg.append(stop_pos)
 			self.length_avg.append(stop_pos-start_pos)
+			
+			cnt += 1
+			
+			if cnt == self.num_reads :
+				print "Done." 
+				print self.num_reads, "records extracted."
+				break
+			
 		# Cleaning up:
 		handle.close()
 		report_handle.write("Total records\tAvg start pos\tAvg end pos\tAvg length\n")
@@ -192,6 +202,7 @@ class Extract :
 			#	new_record = SeqRecord(Seq(str(revcomp[self.spos:self.epos].reverse_complement().seq.upper()), generic_dna), id=record.id, name=record.name, description=record.description)
 			#	SeqIO.write(new_record, output_handle, "fasta")
 			i+=1
+		
 		SeqIO.write(records, output_handle, "fasta")
 		output_handle.close()
 		handle.close()
@@ -218,6 +229,7 @@ def main() :
 	parser.add_argument("-spos", "--start_position", action="store", type=int, dest="spos", default=0, help="positional trimming: from")
 	parser.add_argument("-epos", "--end_position", action="store", type=int, dest="epos", default=1600, help="positional trimming: to")
 	parser.add_argument("-nr", "--num_reads", action="store", type=int, dest="num_reads", default=3000, help="number of reads in a library")
+	parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", default=False, help="verbosing output")
 	
 	args = parser.parse_args()
 	
@@ -242,7 +254,26 @@ def main() :
 		obj.spos = args.spos
 		obj.epos = args.epos
 		obj.num_reads = args.num_reads
-	
+		obj.verbose = args.verbose
+		
+		print "===========Input parameters=========="
+		print "Input file:", args.infile
+		print "Output prefix:", args.outprefix
+		print "Match award:", args.match_award
+		print "Mismatch penalty:", args.mismatch_penalty
+		print "Gap:", args.gap_penalty
+		print "Forward primer", args.forward_primer
+		print "Reverse primer", args.reverse_primer
+		
+		if args.pos_trim == True :
+			print "Positional trimming:", "True"
+			print "Start position:", args.spos
+			print "End position:", args.epos
+		
+		print "Reads to extract:", args.num_reads
+		print "Verbose:", "True" if args.verbose == True else "False"
+		print "====================================="
+		
 		print "Extraction started..."
 		if obj.pos_trim == True :
 			print "Positional trimming..."

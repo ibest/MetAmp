@@ -9,3 +9,5 @@ test500/
 *.o
 python_scripts/*.pyc
 bin/usearch*
+Extracter/.DS_Store
+Extracter/*.pyc
