@@ -228,7 +228,7 @@ def main() :
 	parser.add_argument("-pos", "--positional", action="store_true", dest="pos_trim", default=False, help="positional trimming")
 	parser.add_argument("-spos", "--start_position", action="store", type=int, dest="spos", default=0, help="positional trimming: from")
 	parser.add_argument("-epos", "--end_position", action="store", type=int, dest="epos", default=1600, help="positional trimming: to")
-	parser.add_argument("-nr", "--num_reads", action="store", type=int, dest="num_reads", default=3000, help="number of reads in a library")
+	parser.add_argument("-nr", "--num_reads", action="store", type=int, dest="num_reads", default=3000, help="number of reads to extract from an input file")
 	parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", default=False, help="verbosing output")
 	
 	args = parser.parse_args()
