@@ -31,7 +31,7 @@ forward_primer = "GAATTGACGGGGRCCC" # -m=2 -p=-5 -g=-1
 reverse_primer = "TACGGYTACCTTGTTAYGACTT"
  
 
-Last change was made on 2014/10/14
+Last change was made on 2016/08/10
 
 """
 
@@ -45,6 +45,7 @@ import argparse
 from smgb import *
 from AmbiguityTable import *
 
+cur_ver = "1.1.2" # Current version
 
 class Extract :
 	match = None # Match award
@@ -213,6 +214,11 @@ class Extract :
 		
     	
 def main() :
+
+	if sys.argv[1] == "-ver" or sys.argv[1] == "--version":
+		print "Version:", cur_ver
+		return
+
 	# Setting-up options for option parser:
 	usage = "extract.py -i <input file path> -o <output file prefix> [options]"
 	parser = argparse.ArgumentParser(usage=usage)
@@ -230,8 +236,10 @@ def main() :
 	parser.add_argument("-epos", "--end_position", action="store", type=int, dest="epos", default=1600, help="positional trimming: to")
 	parser.add_argument("-nr", "--num_reads", action="store", type=int, dest="num_reads", default=3000, help="number of reads to extract from an input file")
 	parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", default=False, help="verbosing output")
+	parser.add_argument("-ver", "--version", action="store_true", dest=cur_ver, default=False, help="print version and exit")
 	
 	args = parser.parse_args()
+	
 	
 	# Checking the input parameters:
 	if len(sys.argv) < 3 :
@@ -256,7 +264,7 @@ def main() :
 		obj.num_reads = args.num_reads
 		obj.verbose = args.verbose
 		
-		print "===========Input parameters=========="
+		print "===========Parameters=========="
 		print "Input file:", args.infile
 		print "Output prefix:", args.outprefix
 		print "Match award:", args.match_award
@@ -272,6 +280,7 @@ def main() :
 		
 		print "Reads to extract:", args.num_reads
 		print "Verbose:", "True" if args.verbose == True else "False"
+		print "Extraction by MetAmp Extractor, version: ", cur_ver
 		print "====================================="
 		
 		print "Extraction started..."

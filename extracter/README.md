@@ -30,6 +30,7 @@ optional arguments:
   -nr NUM_READS, --num_reads NUM_READS
                         number of reads to extract from an input file
   -v, --verbose         verbosing output
+  -ver, --version       print version and exit
 ```
 
 ##Examples
